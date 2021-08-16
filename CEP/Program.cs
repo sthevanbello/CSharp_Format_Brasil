@@ -14,19 +14,26 @@ namespace CEP
         static void Main(string[] args)
         {
             string cep = "07084182";
-            string url = $"http://viacep.com.br/ws/{cep}/json/";
 
-            var result = new HttpClient().GetStringAsync(url).Result;
-            Endereco endereco = JsonConvert.DeserializeObject<Endereco>(result);
+            //var endereco = GetEndereco(cep);
+            Endereco endereco = GetEndereco(cep).Result;
+            var endereco2 = GetEndereco("01001000").Result;
 
-            Console.WriteLine(url);
-            Console.WriteLine(result);
-            Debug.WriteLine(result);
-
+            Debug.WriteLine(endereco);
 
             Console.WriteLine(endereco);
 
+            Console.WriteLine(endereco2);
+
             Console.ReadKey();
+        }
+
+        private static async Task<Endereco> GetEndereco(string cep)
+        {
+            string url = $"http://viacep.com.br/ws/{cep}/json/";
+            var result = await new HttpClient().GetStringAsync(url);
+            return JsonConvert.DeserializeObject<Endereco>(result);
+
         }
     }
 }
